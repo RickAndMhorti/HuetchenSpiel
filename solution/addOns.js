@@ -2,6 +2,12 @@
 /* Autor:  */
 /* Übung Nr. */
 /* Datum: */
+class Point{
+	constructor(x,y){
+		this.x = x;
+		this.y = y;
+	}
+}
 
 /**
  * Converts meters to pixels relative to screen width
@@ -18,7 +24,7 @@ function meterToPixel(meter) {
 }
 
 /**
- * Draws a rectangle relative to a starting point with coordinates (x,y)
+ * Draws a rectangle relative to the zero point of the xy axis
  *
  * All parameters except colour are in meters
  * @param x
@@ -27,15 +33,15 @@ function meterToPixel(meter) {
  * @param height
  * @param colour Hex RGB colour e.g #ff00ff to fill triangle
  */
-function drawRectangle(x, y, width, height, colour)
+function drawRectangle(zeroPoint, x, y, width, height, colour)
 	{
 		fill(colour);
 		rectMode(CORNER);
-		rect(meterToPixel(x), meterToPixel(y), meterToPixel(width), meterToPixel(height));
+		rect(zeroPoint.x + meterToPixel(x), zeroPoint.y - meterToPixel(y), meterToPixel(width), meterToPixel(height));
 	}
 
 /**
- * Draws a triangle (improved upon original function by allowing customer colour fill)
+ * Draws a triangle relative to the zero point of the xy axis.
  *
  * All parameters except colour are in meters
  * @param x1 X coordinates of point 1
@@ -46,29 +52,24 @@ function drawRectangle(x, y, width, height, colour)
  * @param y3 Y coordinates of point 3
  * @param colour Hex RGB colour e.g #ff00ff to fill triangle
  */
-function drawTriangle(x1, y1, x2, y2, x3, y3, colour)
+function drawTriangle(zeroPoint, x1, y1, x2, y2, x3, y3, colour)
 {
 	fill(colour);
-	triangle(meterToPixel(x1),meterToPixel(y1),meterToPixel(x2),meterToPixel(y2),meterToPixel(x3),meterToPixel(y3));
+	triangle(zeroPoint.x + meterToPixel(x1),zeroPoint.y - meterToPixel(y1),
+		zeroPoint.x + meterToPixel(x2),zeroPoint.y - meterToPixel(y2),
+		zeroPoint.x + meterToPixel(x3),zeroPoint.y - meterToPixel(y3));
 }
 
 /**
- * Draws a line (improved upon original function by allowing the adjustment of line thickness).
- * All parameters except colour are in meters
- *
- *
- * NOTE: push() and pop() must be called at the start and end of the method to ensure strokeWeight()
- * only changes the line thickness and not the thickness of EVERY line in the sketch
- * @param x1 X coordinates of point 1
- * @param y1 Y coordinates of point 1
- * @param x2 X coordinates of point 2
- * @param y2 Y coordinates of point 2
- * @param lineThickness Thickness of the line
+ * Draws a line from the zero point of the axis
+ * @param x destination X coordinates
+ * @param y destination Y coordinates
+ * @param lineThickness must call push() and pop() to constrain the thickness to the line
  */
-function drawLine(x1, y1, x2, y2, lineThickness){
+function drawLine(zeroPoint, x, y, lineThickness){
 	push();
 	strokeWeight(lineThickness);
-	line(meterToPixel(x1),meterToPixel(y1),meterToPixel(x2),meterToPixel(y2));
+	line(zeroPoint.x,zeroPoint.y,zeroPoint.x + meterToPixel(x),zeroPoint.y - meterToPixel(y));
 	pop();
 }
 
